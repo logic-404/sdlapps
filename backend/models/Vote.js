@@ -12,4 +12,6 @@ const voteSchema = new mongoose.Schema(
 // Enforce: one vote per user per election
 voteSchema.index({ user: 1, election: 1 }, { unique: true });
 
+// test
+
 module.exports = mongoose.model('Vote', voteSchema);
