@@ -1,25 +1,28 @@
-name: CI
+name: CI (Self-hosted)
 
 on:
-    push:
-        branches:
-            - main
-    pull_request:
-        branches:
-            - main
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build:
+    runs-on: [self-hosted, linux, X64]  # targets your EC2 runner
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-        steps:
-        - name: Checkout code
-            uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'   # 14 is EOL; use 18/20
 
-        - name: Set up Node.js
-            uses: actions/setup-node@v2
-            with:
-                node-version: '14'
+      - name: Install dependencies
+        run: npm install
 
-        - name: Install dependencies
-            run: npm install
+      - name: Show working dir (proof)
+        run: |
+          echo "PWD: $(pwd)"
+          ls -la
